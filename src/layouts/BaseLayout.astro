@@ -1,0 +1,66 @@
+---
+import "../styles/global.css";
+import ThemeToggle from "../components/ThemeToggle.astro";
+
+const { title = "Portfolio", description = "Projects, writing, and experiments." } = Astro.props;
+const siteUrl = "https://bluegyu.github.io/";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={siteUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+    <script is:inline>
+      const storedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const theme = storedTheme === "light" || storedTheme === "dark"
+        ? storedTheme
+        : prefersDark
+          ? "dark"
+          : "light";
+      document.documentElement.classList.toggle("dark", theme === "dark");
+    </script>
+  </head>
+  <body class="min-h-screen bg-white text-zinc-900 antialiased dark:bg-black dark:text-zinc-100">
+    <div class="flex min-h-screen flex-col">
+      <header class="border-b border-zinc-100/80 bg-white/70 backdrop-blur-sm dark:border-zinc-800 dark:bg-black/60">
+        <div class="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-3">
+          <a class="text-lg font-semibold" href="/">Portfolio</a>
+          <div class="flex items-center gap-4">
+            <nav class="hidden items-center gap-6 text-sm font-medium sm:flex">
+              <a class="text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white" href="/projects">
+                Projects
+              </a>
+              <a class="text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white" href="/writing">
+                Writing
+              </a>
+            </nav>
+            <ThemeToggle />
+          </div>
+        </div>
+      </header>
+      <main class="flex-1">
+        <div class="mx-auto w-full max-w-5xl px-6 py-12">
+          <slot />
+        </div>
+      </main>
+      <footer class="border-t border-zinc-100/80 py-6 text-sm text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+        <div class="mx-auto flex w-full max-w-5xl items-center justify-between px-6">
+          <span>© 2026 Portfolio</span>
+          <span>Built with Astro</span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

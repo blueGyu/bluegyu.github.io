@@ -1,0 +1,67 @@
+---
+const themes = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "system", label: "System" }
+];
+---
+
+<div class="inline-flex items-center rounded-full border border-zinc-200/80 bg-white/70 p-1 text-xs font-semibold text-zinc-600 shadow-sm shadow-zinc-200/40 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:shadow-none">
+  {themes.map((theme) => (
+    <button
+      type="button"
+      class="rounded-full px-3 py-1 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-500"
+      aria-label={`${theme.label} theme`}
+      data-theme={theme.value}
+    >
+      {theme.label}
+    </button>
+  ))}
+</div>
+
+<script is:inline>
+  const themeButtons = Array.from(document.querySelectorAll("[data-theme]"));
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const getStoredTheme = () => localStorage.getItem("theme") || "system";
+
+  const getPreferredTheme = () => {
+    const stored = getStoredTheme();
+    if (stored === "light" || stored === "dark") {
+      return stored;
+    }
+    return mediaQuery.matches ? "dark" : "light";
+  };
+
+  const applyTheme = () => {
+    const theme = getPreferredTheme();
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    const stored = getStoredTheme();
+    themeButtons.forEach((button) => {
+      const isActive = stored === button.dataset.theme;
+      button.classList.toggle("bg-zinc-900", isActive);
+      button.classList.toggle("text-white", isActive);
+      button.classList.toggle("dark:bg-zinc-100", isActive);
+      button.classList.toggle("dark:text-zinc-900", isActive);
+    });
+  };
+
+  const setTheme = (theme) => {
+    localStorage.setItem("theme", theme);
+    applyTheme();
+  };
+
+  themeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      setTheme(button.dataset.theme);
+    });
+  });
+
+  mediaQuery.addEventListener("change", () => {
+    if (getStoredTheme() === "system") {
+      applyTheme();
+    }
+  });
+
+  applyTheme();
+</script>

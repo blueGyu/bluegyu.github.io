@@ -1,17 +1,33 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Portfolio">
+  <section class="space-y-6">
+    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-zinc-500">Portfolio</p>
+    <div class="space-y-4">
+      <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-100">
+        Build in public, ship with clarity.
+      </h1>
+      <p class="max-w-xl text-lg text-zinc-600 dark:text-zinc-400">
+        A minimal portfolio that turns projects and writing into a narrative.
+        Add Markdown in <span class="font-semibold text-zinc-800 dark:text-zinc-200">content/</span>
+        and focus on what you ship.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-4">
+      <a
+        class="inline-flex items-center justify-center rounded-full bg-zinc-900/90 px-5 py-2 text-sm font-semibold text-white transition hover:bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
+        href="/projects"
+      >
+        View projects
+      </a>
+      <a
+        class="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white/70 px-5 py-2 text-sm font-semibold text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-700 dark:bg-transparent dark:text-zinc-200 dark:hover:border-zinc-400"
+        href="/writing"
+      >
+        Read writing
+      </a>
+    </div>
+  </section>
+</BaseLayout>
