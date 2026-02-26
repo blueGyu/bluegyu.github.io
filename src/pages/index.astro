@@ -1,33 +1,177 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { getAllPosts, getAllProjects } from "../lib/markdown";
+
+const projects = getAllProjects().slice(0, 2);
+const posts = getAllPosts().slice(0, 2);
 ---
 
 <BaseLayout title="Portfolio">
-  <section class="space-y-6">
-    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-zinc-500">Portfolio</p>
-    <div class="space-y-4">
-      <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-100">
-        Build in public, ship with clarity.
-      </h1>
-      <p class="max-w-xl text-lg text-zinc-600 dark:text-zinc-400">
-        A minimal portfolio that turns projects and writing into a narrative.
-        Add Markdown in <span class="font-semibold text-zinc-800 dark:text-zinc-200">content/</span>
-        and focus on what you ship.
-      </p>
-    </div>
-    <div class="flex flex-wrap gap-4">
-      <a
-        class="inline-flex items-center justify-center rounded-full bg-zinc-900/90 px-5 py-2 text-sm font-semibold text-white transition hover:bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
-        href="/projects"
-      >
-        View projects
-      </a>
-      <a
-        class="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white/70 px-5 py-2 text-sm font-semibold text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-700 dark:bg-transparent dark:text-zinc-200 dark:hover:border-zinc-400"
-        href="/writing"
-      >
-        Read writing
-      </a>
-    </div>
-  </section>
+  <div class="space-y-20">
+    <section class="space-y-6">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-zinc-500">Portfolio</p>
+      <div class="space-y-4">
+        <h1 class="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-100">
+          Build in public, ship with clarity.
+        </h1>
+        <p class="max-w-xl text-lg text-zinc-600 dark:text-zinc-400">
+          A minimal portfolio that turns projects and writing into a narrative.
+          Add Markdown in
+          <span class="font-semibold text-zinc-800 dark:text-zinc-200">content/</span>
+          and focus on what you ship.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <a
+          class="inline-flex items-center justify-center rounded-full bg-zinc-900/90 px-5 py-2 text-sm font-semibold text-white transition hover:bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
+          href="/projects"
+        >
+          View projects
+        </a>
+        <a
+          class="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white/70 px-5 py-2 text-sm font-semibold text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-700 dark:bg-transparent dark:text-zinc-200 dark:hover:border-zinc-400"
+          href="/writing"
+        >
+          Read writing
+        </a>
+      </div>
+    </section>
+
+    <section class="grid gap-4 sm:grid-cols-3">
+      <div class="rounded-2xl border border-zinc-200/60 bg-white/60 p-6 shadow-sm shadow-zinc-200/50 transition hover:-translate-y-1 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-transparent dark:shadow-none">
+        <h3 class="text-lg font-semibold">Product thinking</h3>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+          Aligning teams around outcomes, constraints, and a clear definition of done.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-zinc-200/60 bg-white/60 p-6 shadow-sm shadow-zinc-200/50 transition hover:-translate-y-1 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-transparent dark:shadow-none">
+        <h3 class="text-lg font-semibold">Engineering craft</h3>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+          Building reliable systems with pragmatic tradeoffs and crisp execution.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-zinc-200/60 bg-white/60 p-6 shadow-sm shadow-zinc-200/50 transition hover:-translate-y-1 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-transparent dark:shadow-none">
+        <h3 class="text-lg font-semibold">Storytelling</h3>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+          Turning launches and experiments into clear narratives and reusable playbooks.
+        </p>
+      </div>
+    </section>
+
+    <section class="space-y-6">
+      <SectionHeading
+        eyebrow="Projects"
+        title="Selected work"
+        subtitle="A few recent case studies. Add more in content/projects."
+      />
+      {projects.length === 0 ? (
+        <div class="rounded-2xl border border-dashed border-zinc-200 bg-white/60 p-8 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-transparent dark:text-zinc-400">
+          No projects yet. Add a Markdown file to publish your first project.
+        </div>
+      ) : (
+        <div class="grid gap-4 sm:grid-cols-2">
+          {projects.map((project) => (
+            <a
+              href={`/projects/${project.slug}`}
+              class="group rounded-2xl border border-zinc-200/60 bg-white/60 p-6 shadow-sm shadow-zinc-200/40 transition hover:-translate-y-1 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-transparent dark:shadow-none dark:hover:border-zinc-700"
+            >
+              <div class="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-zinc-500">
+                <span>{project.date}</span>
+                {project.status ? (
+                  <span class="rounded-full border border-zinc-200 px-2 py-0.5 text-[10px] font-semibold text-zinc-600 dark:border-zinc-700 dark:text-zinc-300">
+                    {project.status === "in-progress" ? "In Progress" : "Shipped"}
+                  </span>
+                ) : null}
+              </div>
+              <h3 class="mt-3 text-lg font-semibold group-hover:text-zinc-700 dark:group-hover:text-zinc-200">
+                {project.title}
+              </h3>
+              {project.summary ? (
+                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{project.summary}</p>
+              ) : null}
+            </a>
+          ))}
+        </div>
+      )}
+      <div>
+        <a
+          class="text-sm font-semibold text-zinc-700 transition hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
+          href="/projects"
+        >
+          View all projects →
+        </a>
+      </div>
+    </section>
+
+    <section class="space-y-6">
+      <SectionHeading
+        eyebrow="Writing"
+        title="Notes and lessons"
+        subtitle="Short essays and postmortems to build public momentum."
+      />
+      {posts.length === 0 ? (
+        <div class="rounded-2xl border border-dashed border-zinc-200 bg-white/60 p-8 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-transparent dark:text-zinc-400">
+          아직 글이 없습니다.
+          <span class="font-semibold text-zinc-700 dark:text-zinc-200">content/posts/_template.md</span>
+          파일을 참고해 첫 글을 작성하세요.
+        </div>
+      ) : (
+        <div class="space-y-4">
+          {posts.map((post) => (
+            <a
+              href={`/writing/${post.slug}`}
+              class="group flex flex-col gap-2 rounded-2xl border border-zinc-200/60 bg-white/60 p-6 shadow-sm shadow-zinc-200/40 transition hover:-translate-y-1 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-transparent dark:shadow-none dark:hover:border-zinc-700"
+            >
+              <div class="text-xs uppercase tracking-[0.2em] text-zinc-500">{post.date}</div>
+              <h3 class="text-lg font-semibold group-hover:text-zinc-700 dark:group-hover:text-zinc-200">
+                {post.title}
+              </h3>
+              {post.summary ? (
+                <p class="text-sm text-zinc-600 dark:text-zinc-400">{post.summary}</p>
+              ) : null}
+            </a>
+          ))}
+        </div>
+      )}
+      <div>
+        <a
+          class="text-sm font-semibold text-zinc-700 transition hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
+          href="/writing"
+        >
+          View all writing →
+        </a>
+      </div>
+    </section>
+
+    <section class="space-y-6">
+      <SectionHeading
+        eyebrow="Contact"
+        title="Let’s build something useful"
+        subtitle="Open to collaboration, product feedback, and interesting problems."
+      />
+      <div class="flex flex-wrap gap-4">
+        <a
+          class="inline-flex items-center justify-center rounded-full bg-zinc-900/90 px-5 py-2 text-sm font-semibold text-white transition hover:bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
+          href="https://github.com/your-id"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+        <a
+          class="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white/70 px-5 py-2 text-sm font-semibold text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-700 dark:bg-transparent dark:text-zinc-200 dark:hover:border-zinc-400"
+          href="mailto:hello@example.com"
+        >
+          Email
+        </a>
+        <a
+          class="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white/70 px-5 py-2 text-sm font-semibold text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-700 dark:bg-transparent dark:text-zinc-200 dark:hover:border-zinc-400"
+          href="/resume"
+        >
+          Resume
+        </a>
+      </div>
+    </section>
+  </div>
 </BaseLayout>

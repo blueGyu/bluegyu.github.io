@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getAllPosts, getPostBySlug } from "../../lib/markdown";
+
+export async function getStaticPaths() {
+  const posts = getAllPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug }
+  }));
+}
+
+const { slug } = Astro.params;
+const post = await getPostBySlug(slug);
+
+if (!post) {
+  return Astro.redirect("/writing");
+}
+---
+
+<BaseLayout title={post.frontmatter.title}>
+  <article class="space-y-8">
+    <header class="space-y-3">
+      <div class="text-xs uppercase tracking-[0.2em] text-zinc-500">{post.frontmatter.date}</div>
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{post.frontmatter.title}</h1>
+      {post.frontmatter.summary ? (
+        <p class="max-w-2xl text-base text-zinc-600 dark:text-zinc-400">
+          {post.frontmatter.summary}
+        </p>
+      ) : null}
+    </header>
+
+    {post.frontmatter.tags?.length ? (
+      <div class="flex flex-wrap gap-2 text-xs text-zinc-500">
+        {post.frontmatter.tags.map((tag) => (
+          <span class="rounded-full border border-zinc-200 px-2 py-1 dark:border-zinc-700">
+            {tag}
+          </span>
+        ))}
+      </div>
+    ) : null}
+
+    <section
+      class="space-y-4 text-base leading-7 text-zinc-700 dark:text-zinc-300"
+      set:html={post.contentHtml}
+    />
+  </article>
+</BaseLayout>

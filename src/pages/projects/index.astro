@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getAllProjects } from "../../lib/markdown";
+
+const projects = getAllProjects();
+---
+
+<BaseLayout title="Projects">
+  <section class="space-y-8">
+    <div class="space-y-3">
+      <h1 class="text-3xl font-semibold tracking-tight">Projects</h1>
+      <p class="max-w-2xl text-zinc-600 dark:text-zinc-400">
+        Case studies and experiments, loaded from
+        <span class="font-medium text-zinc-800 dark:text-zinc-200">content/projects</span>.
+      </p>
+    </div>
+
+    {projects.length === 0 ? (
+      <div class="rounded-2xl border border-dashed border-zinc-200 bg-white/60 p-8 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-transparent dark:text-zinc-400">
+        No projects yet. Add a Markdown file to publish your first project.
+      </div>
+    ) : (
+      <div class="grid gap-4 sm:grid-cols-2">
+        {projects.map((project) => (
+          <a
+            href={`/projects/${project.slug}`}
+            class="group rounded-2xl border border-zinc-200/60 bg-white/60 p-6 shadow-sm shadow-zinc-200/40 transition hover:-translate-y-1 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800 dark:bg-transparent dark:shadow-none dark:hover:border-zinc-700"
+          >
+            <div class="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-zinc-500">
+              <span>{project.date}</span>
+              {project.status ? (
+                <span class="rounded-full border border-zinc-200 px-2 py-0.5 text-[10px] font-semibold text-zinc-600 dark:border-zinc-700 dark:text-zinc-300">
+                  {project.status === "in-progress" ? "In Progress" : "Shipped"}
+                </span>
+              ) : null}
+            </div>
+            <h2 class="mt-3 text-lg font-semibold group-hover:text-zinc-700 dark:group-hover:text-zinc-200">
+              {project.title}
+            </h2>
+            {project.summary ? (
+              <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{project.summary}</p>
+            ) : null}
+            {project.stack?.length ? (
+              <div class="mt-4 flex flex-wrap gap-2 text-xs text-zinc-500">
+                {project.stack.map((item) => (
+                  <span class="rounded-full border border-zinc-200 px-2 py-1 dark:border-zinc-700">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>
